@@ -12,6 +12,47 @@ const Vote = ({vots})=>
   }
 }
 
+const MostVoted = ({anecdotes, votesRecord})=>
+{
+  const max = (list, maxi=0, end=0)=>
+  {
+    if(list.length === end+1)
+    {
+      return maxi
+    }
+    else if(list[maxi] > list[end+1])
+    {
+      return max(list, maxi, end+1)
+    }
+    else
+    {
+      maxi = end+1;
+      return max(list, maxi, end+1)
+    }
+  }
+
+  const maximum = max(votesRecord,0,0);
+  if(votesRecord[maximum] === 0)
+  {
+    return(
+      <>
+        <h2>Anecdote with most votes</h2>
+        <p>No Anecdote voted, plase vote one.</p>
+      </>
+    )
+  }
+  else
+  {
+    return(
+      <>
+        <h2>Anecdote with most votes</h2>
+        <p>{anecdotes[maximum]}</p>
+        <Vote vots={votesRecord[maximum]}/>
+      </>
+    )
+  }
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -50,6 +91,7 @@ const App = () => {
       <Vote vots={vots[selected]}/>
       <button onClick={()=>setVote(selected)}>vote</button>
       <button onClick={()=>setSelected(generateRandom())}>next anecdote</button>
+      <MostVoted anecdotes={anecdotes} votesRecord={vots}/>
     </div>
   )
 }
