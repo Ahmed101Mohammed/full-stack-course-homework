@@ -1,6 +1,5 @@
 const Header = (props)=>
 {
-  console.log({props})
   return (<h1>{props.course.name}</h1>)
 }
 
@@ -22,15 +21,9 @@ const Content = ({parts})=>
   )
 }
 
-const Total = (props)=>
+const Total = ({parts})=>
 {
-  let total = 0;
-  for (let i = 0; i < props.parts.length; i++)
-  {
-    total += props.parts[i].exercises;
-  }
-
-  return(<p>total of {total} exercises</p>)
+  return(<p>total of {parts.reduce((total, part)=> total + part.exercises, 0)} exercises</p>)
 }
 
 const Course = ({course})=>
