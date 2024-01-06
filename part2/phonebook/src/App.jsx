@@ -6,10 +6,28 @@ const App = () => {
   ]) 
   const [newName, setNewName] = useState('')
 
+  const isPersonExistBefore = (str, arr)=>
+  {
+    for (let item of arr)
+    {
+      if(str === item.name)
+      {
+        return true
+      }
+    }
+    return false;
+  }
   const sumit = (e)=>
   {
     e.preventDefault();
-    setPersons(persons.concat({name: newName}));
+    if(isPersonExistBefore(newName, persons))
+    {
+      alert(`${newName}  is already added to phonebook`)
+    }
+    else
+    {
+      setPersons(persons.concat({name: newName}));
+    }
     setNewName("");
   }
   return (
