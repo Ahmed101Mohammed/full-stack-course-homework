@@ -2,11 +2,15 @@ import { useState } from 'react'
 
 const StatisticLine = ({text, value, postFex})=>
 {
-  if(postFex !== null)
+  if(postFex !== undefined)
   {
-    return <p>{text} {value} {postFex}</p>
+    return (
+    <tr> 
+      <th>{text}</th>
+      <td>{value} {postFex}</td>
+    </tr>)
   }
-  return <p>{text} {value}</p>
+  return <tr> <th>{text}</th> <td>{value}</td> </tr>
   
 }
 
@@ -20,12 +24,17 @@ const Statistics = ({good, neutral, bad})=>
   return (
     <>
       <h2>statistics</h2>
-      <StatisticLine text="good" value={good}/>
-      <StatisticLine text="neutral" value={neutral}/>
-      <StatisticLine text="bad" value={bad}/>
-      <StatisticLine text="all" value={all}/>
-      <StatisticLine text="avarage" value={all/3}/>
-      <StatisticLine text="positive" value={(good/all)*100} postFex="%"/>
+      <table>
+        <tbody>
+          <StatisticLine text="good" value={good}/>
+          <StatisticLine text="neutral" value={neutral}/>
+          <StatisticLine text="bad" value={bad}/>
+          <StatisticLine text="all" value={all}/>
+          <StatisticLine text="avarage" value={all/3}/>
+          <StatisticLine text="positive" value={(good/all)*100} postFex="%"/>
+        </tbody>
+      </table>
+      
     </>
   )
 }
