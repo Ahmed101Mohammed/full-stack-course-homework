@@ -1,4 +1,16 @@
 import { useState } from 'react'
+const Vote = ({vots})=>
+{
+  switch (vots)
+  {
+    case 0:
+      return (<p>has No votes</p>);
+    case 1:
+      return <p>has 1 vote</p>;
+    default:
+      return <p>has {vots} votes</p>
+  }
+}
 
 const App = () => {
   const anecdotes = [
@@ -22,12 +34,21 @@ const App = () => {
     return randomValue
   }
 
-  const [selected, setSelected] = useState(generateRandom())
-  
+  const [selected, setSelected] = useState(generateRandom());
+  const [vots, setVotes] = useState([0,0,0,0,0,0,0,0]);
+
+  const setVote = (select)=>
+  {
+    let copy = [...vots];
+    copy[select] += 1;
+    setVotes(copy);
+  }
+
   return (
     <div>
-      {anecdotes[selected]}
-      <br/>
+      <p>{anecdotes[selected]}</p>
+      <Vote vots={vots[selected]}/>
+      <button onClick={()=>setVote(selected)}>vote</button>
       <button onClick={()=>setSelected(generateRandom())}>next anecdote</button>
     </div>
   )
