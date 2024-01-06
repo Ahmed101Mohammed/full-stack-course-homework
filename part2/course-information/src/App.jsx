@@ -30,7 +30,7 @@ const Total = (props)=>
     total += props.parts[i].exercises;
   }
 
-  return(<p>Number of exercises {total}</p>)
+  return(<p>total of {total} exercises</p>)
 }
 
 const Course = ({course})=>
