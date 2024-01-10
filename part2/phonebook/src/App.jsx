@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import phonbookServices from './services/phonbookServices'
 
 const Filter = ({search, handleChange})=>
 {
@@ -63,14 +63,16 @@ const App = () => {
     }
     else
     {
-      setPersons(persons.concat({name: newName, number: newNumber}));
+      phonbookServices.create({name: newName, number: newNumber})
+      .then(data=> setPersons(persons.concat(data)))
+      .catch(err => console.log('Failed to create the new person.'))
     }
     setNewName("");
     setNewNumber("");
   }
   useEffect(()=>{
-    const promise = axios.get('http://localhost:3001/persons') 
-    promise.then(r=>setPersons(r.data))
+    const promise = phonbookServices.getAll() 
+    promise.then(data=>setPersons(data)).catch(err=>console.log("Failed to get the data from server."))
   }, [])
   const newPersons = persons.filter((person)=> person.name.slice(0, search.length).toLowerCase() === search.toLowerCase());
   
