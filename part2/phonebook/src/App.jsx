@@ -49,17 +49,28 @@ const App = () => {
     {
       if(str === item.name)
       {
-        return true
+        return item
       }
     }
     return false;
   }
+
+  const updatePerson = (item)=>
+  {
+    phonbookServices.update(item.id, {...item, number:newNumber})
+    .then(data => {
+      const updatedPhonebook = persons.map(person => person.id==item.id? data : person)
+      setPersons(updatedPhonebook)
+    })
+    .catch(err=>console.log("Failed to update", item.name, "number"))
+  }
   const sumit = (e)=>
   {
     e.preventDefault();
-    if(isPersonExistBefore(newName, persons))
+    const isPersonAlreadyExist = isPersonExistBefore(newName, persons);
+    if(isPersonAlreadyExist)
     {
-      alert(`${newName}  is already added to phonebook`)
+      window.confirm(`${newName} is already added to phonebook, repleace the old number with the new number?`)? updatePerson(isPersonAlreadyExist):none;
     }
     else
     {
