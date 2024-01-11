@@ -53,12 +53,13 @@ function App() {
       })
   }
   
+
   useEffect(getAllCountriesNames,[])
 
   return (
     <main>
       <SearchForm updateSearchContent={(e)=> setSearchContent(e.target.value)} searchContent={searchContent}/>
-      <ResultsContainer countriesData={shownData} singleCountry={singleCountry} />
+      <ResultsContainer countriesData={shownData} singleCountry={singleCountry} setSearchContent={setSearchContent}/>
     </main>
     
   )

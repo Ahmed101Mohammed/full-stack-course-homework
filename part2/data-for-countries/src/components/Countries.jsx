@@ -1,4 +1,4 @@
-const Countries = ({countries})=>
+const Countries = ({countries, setSearchContent})=>
 {
     if(countries.length > 10)
     {
@@ -7,7 +7,7 @@ const Countries = ({countries})=>
 
     return (
         <ul>
-            {countries.map(country=> <li key={country}>{country}</li>)}
+            {countries.map(country=> <li key={country}>{country} <button onClick={()=> setSearchContent(country)}>Show</button></li>)}
         </ul>
     )
 }
