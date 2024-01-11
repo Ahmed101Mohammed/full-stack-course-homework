@@ -3,12 +3,12 @@ import phonbookServices from './services/phonbookServices'
 
 const Notification = ({message})=>
 {
-  if(!message)
+  if(!message.content)
   {
     return null;
   }
 
-  return (<div className='notification'>{message}</div>)
+  return (<div className={message.styleClass}>{message.content}</div>)
 }
 const Filter = ({search, handleChange})=>
 {
@@ -52,7 +52,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('');
   const [search, setSearch] = useState("");
-  const [message, setMessage] = useState(null)
+  const [message, setMessage] = useState({content:null, styleClass:''})
   const isPersonExistBefore = (str, arr)=>
   {
     for (let item of arr)
@@ -87,8 +87,8 @@ const App = () => {
       phonbookServices.create({name: newName, number: newNumber})
       .then(data=> {
         setPersons(persons.concat(data))
-        setMessage(`Added ${data.name}`)
-        setTimeout(()=> setMessage(null),5000)
+        setMessage({content:`Added ${data.name}`,styleClass:'add'})
+        setTimeout(()=> setMessage({content:null, styleClass:""}),3000)
       })
       
       .catch(err => console.log('Failed to create the new person.'))
@@ -106,7 +106,10 @@ const App = () => {
         const remainPersons = persons.filter(person=>person.id !== data.id)
         setPersons(remainPersons)
       })
-      .catch("Failed to remove the person.")
+      .catch(err=>{
+        setMessage({content:`Information of ${name} has already been removed from server`, styleClass:'failed-removing'})
+        setTimeout(()=> setMessage({content:null, styleClass:""}),3000)
+      })
     }
   }
 
