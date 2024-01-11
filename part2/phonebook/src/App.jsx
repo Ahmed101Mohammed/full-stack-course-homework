@@ -1,6 +1,15 @@
 import { useState, useEffect } from 'react'
 import phonbookServices from './services/phonbookServices'
 
+const Notification = ({message})=>
+{
+  if(!message)
+  {
+    return null;
+  }
+
+  return (<div className='notification'>{message}</div>)
+}
 const Filter = ({search, handleChange})=>
 {
   return (
@@ -43,6 +52,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('');
   const [search, setSearch] = useState("");
+  const [message, setMessage] = useState(null)
   const isPersonExistBefore = (str, arr)=>
   {
     for (let item of arr)
@@ -70,12 +80,17 @@ const App = () => {
     const isPersonAlreadyExist = isPersonExistBefore(newName, persons);
     if(isPersonAlreadyExist)
     {
-      window.confirm(`${newName} is already added to phonebook, repleace the old number with the new number?`)? updatePerson(isPersonAlreadyExist):none;
+      window.confirm(`${newName} is already added to phonebook, repleace the old number with the new number?`)? updatePerson(isPersonAlreadyExist):null;
     }
     else
     {
       phonbookServices.create({name: newName, number: newNumber})
-      .then(data=> setPersons(persons.concat(data)))
+      .then(data=> {
+        setPersons(persons.concat(data))
+        setMessage(`Added ${data.name}`)
+        setTimeout(()=> setMessage(null),5000)
+      })
+      
       .catch(err => console.log('Failed to create the new person.'))
     }
     setNewName("");
@@ -109,6 +124,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter search={search} handleChange={searching}/>
       <PersonForm newName={newName} 
                   newNumber={newNumber} 
