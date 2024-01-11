@@ -26,15 +26,15 @@ const PersonForm = ({handleSubmit, newName, newNumber, handleChangeForName, hand
   )
 }
 
-const Person = ({person})=>{
-  return <p>{person.name} {person.number}</p>
+const Person = ({person, handleRemoving})=>{
+  return <li>{person.name} {person.number} <button onClick={handleRemoving}>Delete</button></li>
 }
 
-const Persons = ({persons})=>
+const Persons = ({persons, handleRemove})=>
 {
   return(
     <>
-      {persons.map((person)=>(<Person key={person.name} person={person}/>))}
+      {persons.map((person)=>(<Person key={person.id} person={person} handleRemoving={()=>handleRemove(person.id, person.name)}/>))}
     </>
   )
 }
@@ -70,6 +70,20 @@ const App = () => {
     setNewName("");
     setNewNumber("");
   }
+  
+  const removePerson = (id, name)=>
+  {
+    if(window.confirm(`Delete ${name} ?`)) 
+    {
+      phonbookServices.remove(id)
+      .then(data => {
+        const remainPersons = persons.filter(person=>person.id !== data.id)
+        setPersons(remainPersons)
+      })
+      .catch("Failed to remove the person.")
+    }
+  }
+
   useEffect(()=>{
     const promise = phonbookServices.getAll() 
     promise.then(data=>setPersons(data)).catch(err=>console.log("Failed to get the data from server."))
@@ -92,7 +106,7 @@ const App = () => {
                   handleChangeForNumber={(e)=> setNewNumber(e.target.value)}/>
       
       <h2>Numbers</h2>
-      <Persons persons={newPersons}/>
+      <Persons persons={newPersons} handleRemove={removePerson} />
       
     </div>
   )
