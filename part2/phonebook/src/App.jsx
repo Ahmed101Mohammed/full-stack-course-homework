@@ -1,52 +1,10 @@
 import { useState, useEffect } from 'react'
 import phonbookServices from './services/phonbookServices'
+import Notification from './components/Notification'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
 
-const Notification = ({message})=>
-{
-  if(!message.content)
-  {
-    return null;
-  }
-
-  return (<div className={message.styleClass}>{message.content}</div>)
-}
-const Filter = ({search, handleChange})=>
-{
-  return (
-    <form>
-        <label htmlFor="search">search:</label>
-        <input type="search" id="search" value={search} onChange={handleChange} />
-    </form>
-  )
-}
-
-const PersonForm = ({handleSubmit, newName, newNumber, handleChangeForName, handleChangeForNumber})=>
-{
-  return(
-    <form onSubmit={handleSubmit}>
-        <div>
-          name: <input value={newName} onChange={handleChangeForName}/>
-        </div>
-        <div>number: <input value={newNumber} onChange={handleChangeForNumber}/></div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-    </form>
-  )
-}
-
-const Person = ({person, handleRemoving})=>{
-  return <li>{person.name} {person.number} <button onClick={handleRemoving}>Delete</button></li>
-}
-
-const Persons = ({persons, handleRemove})=>
-{
-  return(
-    <>
-      {persons.map((person)=>(<Person key={person.id} person={person} handleRemoving={()=>handleRemove(person.id, person.name)}/>))}
-    </>
-  )
-}
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
