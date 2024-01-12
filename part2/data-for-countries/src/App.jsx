@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import api from "./services/data-for-countries-api"
 import SearchForm from "./components/SearchForm"
 import ResultsContainer from "./components/ResaltsContainer"
+import getWeather from './services/whether-api'
 
 function App() {
   const [searchContent, setSearchContent] = useState(null)
@@ -23,9 +24,10 @@ function App() {
     if(possipleShownData.length === 1) 
     {
       api.getCountry(possipleShownData[0]).then(data => {
-        if((singleCountry && singleCountry.name.common !== data.name.common)||!singleCountry)
+        if((singleCountry && singleCountry[0].name.common !== data.name.common)||!singleCountry)
         {
-          setSingleCountry(data)
+          getWeather(data.capital).then(weatherData=>setSingleCountry([data,weatherData]))
+          .catch("Failed to load the weather data of", data.capital)         
         }
       })
       .catch(err=>console.log("Failed to load full country data."))
@@ -55,7 +57,6 @@ function App() {
   
 
   useEffect(getAllCountriesNames,[])
-
   return (
     <main>
       <SearchForm updateSearchContent={(e)=> setSearchContent(e.target.value)} searchContent={searchContent}/>
