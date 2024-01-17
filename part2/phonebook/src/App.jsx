@@ -11,6 +11,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [search, setSearch] = useState("");
   const [message, setMessage] = useState({content:null, styleClass:''})
+
   const isPersonExistBefore = (str, arr)=>
   {
     for (let item of arr)
@@ -32,6 +33,7 @@ const App = () => {
     })
     .catch(err=>console.log("Failed to update", item.name, "number"))
   }
+
   const sumit = (e)=>
   {
     e.preventDefault();
@@ -61,7 +63,7 @@ const App = () => {
     {
       phonbookServices.remove(id)
       .then(data => {
-        const remainPersons = persons.filter(person=>person.id !== data.id)
+        const remainPersons = persons.filter(person=>Number(person.id) !== Number(data.id))
         setPersons(remainPersons)
       })
       .catch(err=>{
